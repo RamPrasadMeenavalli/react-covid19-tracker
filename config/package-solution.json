@@ -1,0 +1,13 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "react-covid-19-tracker-client-side-solution",
+    "id": "5993a67a-ef68-4503-94d1-ac44644f2d60",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "isDomainIsolated": false
+  },
+  "paths": {
+    "zippedPackage": "solution/react-covid-19-tracker.sppkg"
+  }
+}

@@ -1,0 +1,74 @@
+@import '~office-ui-fabric-react/dist/sass/References.scss';
+
+.covid19Tracker {
+  .container {
+
+    .statContainer{
+      @include ms-Grid-row;
+      .statBox{
+        @include ms-Grid-col;
+        @include ms-sm12;
+        background-color: "[theme: themeDark, default: #770208]";
+        .wrapper{
+          padding:15px;
+          color: $ms-color-white;
+        }
+      }
+
+      .statBoxSecondary{
+        @include ms-Grid-col;
+        @include ms-sm6;
+        background-color: "[theme: themeLighterAlt, default: #fecacd]";
+        border-right: 1px dashed gray;
+        .wrapper{
+          margin:15px;
+          color: $ms-color-black;
+        }
+        .label{
+          @include ms-fontSize-xs;
+          
+        }
+        .count{
+          @include ms-fontSize-xl;
+        }
+      }
+
+      .statBoxSecondaryFull{
+        @include ms-Grid-col;
+        @include ms-sm12;
+        background-color: "[theme: themeLighterAlt, default: #fecacd]";
+        
+        .wrapper{
+          padding:15px;
+          color: $ms-color-black;
+        }
+        .label{
+          @include ms-fontSize-xs;
+          
+        }
+        .count{
+          @include ms-fontSize-xl;
+        }
+      }
+
+      .label{
+        @include ms-fontSize-s;
+        
+      }
+      .count{
+        @include ms-fontSize-xxl;
+      }
+    }
+
+    .date{
+      @include ms-fontSize-xs;
+      color: gray;
+      font-style: italic;
+      font-weight: bold;
+      text-align: right;
+    }
+    .editButton{
+      top:-5px;
+    }
+  }
+}

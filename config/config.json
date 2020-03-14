@@ -1,0 +1,19 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "covid-19-tracker-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/covid19Tracker/Covid19TrackerWebPart.js",
+          "manifest": "./src/webparts/covid19Tracker/Covid19TrackerWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "Covid19TrackerWebPartStrings": "lib/webparts/covid19Tracker/loc/{locale}.js",
+    "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js"
+  }
+}
