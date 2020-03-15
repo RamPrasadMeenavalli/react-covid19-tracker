@@ -8,7 +8,8 @@ import { KeyedCollection } from './KeyedCollection';
 import { IconButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { ComboBox, IComboBoxOption, SelectableOptionMenuItemType } from 'office-ui-fabric-react/lib/index';
+import { ComboBox, IComboBoxOption, SelectableOptionMenuItemType, css } from 'office-ui-fabric-react/lib/index';
+import ChangeLocationDialog from './ChangeLocationDialog/ChangeLocationDialog';
 
 export default class Covid19Tracker extends React.Component<ICovid19TrackerProps, ICovid19TrackerState> {
 
@@ -41,7 +42,6 @@ export default class Covid19Tracker extends React.Component<ICovid19TrackerProps
         recovered: 0,
       },
       location: selectedLoc,
-      chosenLocation: selectedLoc,
       locationStats:{
         confirmed: 0,
         deaths: 0,
@@ -51,18 +51,19 @@ export default class Covid19Tracker extends React.Component<ICovid19TrackerProps
   }
 
   public render(): React.ReactElement<ICovid19TrackerProps> {
+    const {latest, locationStats} = this.state;
     const { semanticColors }: IReadonlyTheme = this.props.themeVariant;
     const secondaryRowCssClass = this.props.showDeaths && this.props.showRecovered ? styles.statBoxSecondary : styles.statBoxSecondaryFull;
     return (
       <div className={ styles.covid19Tracker }
         style={{ backgroundColor: semanticColors.bodyBackground }}
       >
-          <WebPartTitle
-            themeVariant = {this.props.themeVariant}
-            displayMode={this.props.displayMode}
-            title={this.props.title}
-            updateProperty={this.props.updateTitle}
-          />
+        <WebPartTitle
+          themeVariant = {this.props.themeVariant}
+          displayMode={this.props.displayMode}
+          title={this.props.title}
+          updateProperty={this.props.updateTitle}
+        />
 
         <div className={ styles.container }>
 
@@ -75,7 +76,7 @@ export default class Covid19Tracker extends React.Component<ICovid19TrackerProps
                   Total Confirmed
                 </div>
                 <div className={styles.count}>
-                  {this.state.latest.confirmed.toLocaleString()}
+                  {latest.confirmed.toLocaleString()}
                 </div>
                 </div>
               </div>              
@@ -87,19 +88,19 @@ export default class Covid19Tracker extends React.Component<ICovid19TrackerProps
                   Total Recovered
                 </div>
                 <div className={styles.count}>
-                  {this.state.latest.recovered.toLocaleString()}
+                  {latest.recovered.toLocaleString()}
                 </div>
                 </div>
               </div>              
             )}
             {this.props.showDeaths && (
-              <div className = {secondaryRowCssClass} style={{borderRightWidth:"0px"}}>
+              <div className = {secondaryRowCssClass}>
                 <div className = {styles.wrapper}>
                 <div className = {styles.label}>
                   Total Deaths
                 </div>
                 <div className={styles.count}>
-                  {this.state.latest.deaths.toLocaleString()}
+                  {latest.deaths.toLocaleString()}
                 </div>
                 </div>
               </div>              
@@ -107,24 +108,37 @@ export default class Covid19Tracker extends React.Component<ICovid19TrackerProps
           </div>
 
           {/* Show the statistics for the selected location */}
-          <h3>
-            {this.state.location.province && (
-              <>{this.state.location.province},&nbsp;</>
-            )}
-            {this.state.location.country}
-            <IconButton onClick={this._showChangeDialog} className={styles.editButton}>
-              <Icon iconName="Edit"></Icon>
-            </IconButton>
-          </h3>
+          <div className={styles.sectionTitle}>
+              {this.state.location.province && (
+                <>{this.state.location.province},&nbsp;</>
+              )}
+              {this.state.location.country}
+              <IconButton onClick={() => this.setState({showChangeDialog:true})}>
+                <Icon iconName="Edit"></Icon>
+              </IconButton>
+          </div>
           <div className= { styles.statContainer }>
+
             {this.props.showConfirmed && (
               <div className = {styles.statBox}>
                 <div className = {styles.wrapper}>
                 <div className = {styles.label}>
-                  Total Confirmed
+                  Confirmed
                 </div>
                 <div className={styles.count}>
-                  {this.state.locationStats.confirmed.toLocaleString()}
+                  {locationStats.confirmed.toLocaleString()}
+
+                  <div className={styles.change}>
+                    {locationStats.confirmed > locationStats.prevConfirmed ? 
+                      // Negative case
+                      <div className={css(styles.red, styles.up)}>{locationStats.confirmed - locationStats.prevConfirmed}</div> : 
+                      locationStats.confirmed < locationStats.prevConfirmed ? 
+                      // Positive case
+                      <div className={css(styles.green, styles.down)}>{locationStats.prevConfirmed - locationStats.confirmed}</div> : 
+                      // Neutral case
+                      <div className={styles.neutral}>0</div>
+                    }
+                  </div>
                 </div>
                 </div>
               </div>              
@@ -133,98 +147,67 @@ export default class Covid19Tracker extends React.Component<ICovid19TrackerProps
               <div className = {secondaryRowCssClass}>
                 <div className = {styles.wrapper}>
                 <div className = {styles.label}>
-                  Total Recovered
+                  Recovered
                 </div>
                 <div className={styles.count}>
-                  {this.state.locationStats.recovered.toLocaleString()}
+                  {locationStats.recovered.toLocaleString()}
+                  <div className={styles.change}>
+                    {locationStats.recovered > locationStats.prevRecovered ? 
+                      // Positive case
+                      <div className={css(styles.green, styles.up)}>{locationStats.recovered - locationStats.prevRecovered}</div> : 
+                      locationStats.recovered < locationStats.prevRecovered ? 
+                      // Negative case
+                      <div className={css(styles.red, styles.down)}>{locationStats.prevRecovered - locationStats.recovered}</div> : 
+                      // Neutral case
+                      <div className={styles.neutral}>0</div>
+                    }
+                  </div>                  
                 </div>
                 </div>
               </div>              
             )}
             {this.props.showDeaths && (
-              <div className = {secondaryRowCssClass} style={{borderRightWidth:"0px"}}>
+              <div className = {secondaryRowCssClass}>
                 <div className = {styles.wrapper}>
                 <div className = {styles.label}>
-                  Total Deaths
+                  Deaths
                 </div>
                 <div className={styles.count}>
-                  {this.state.locationStats.deaths.toLocaleString()}
+                  {locationStats.deaths.toLocaleString()}
+                  <div className={styles.change}>
+                    {locationStats.deaths > locationStats.prevDeaths ? 
+                      // Negative case
+                      <div className={css(styles.red, styles.up)}>{locationStats.deaths - locationStats.prevDeaths}</div> : 
+                      locationStats.deaths < locationStats.prevDeaths ? 
+                      // Positive case
+                      <div className={css(styles.green, styles.down)}>{locationStats.prevDeaths - locationStats.deaths}</div> : 
+                      // Neutral case
+                      <div className={styles.neutral}>0</div>
+                    }
+                  </div>
                 </div>
                 </div>
               </div>              
             )}  
           </div>
 
+          {latest.lastUpdated && (
+            <div className={styles.date}>
+            as on {latest.lastUpdated}
+            </div>            
+          )}
+          
+
           {/* Modal to personalize the selected location */}
           {
             this.state.showChangeDialog && (
-            <Dialog
+              <ChangeLocationDialog
               isOpen={this.state.showChangeDialog}
               onDismiss={()=>{this.setState({showChangeDialog:false});}}
-              dialogContentProps={{
-                type: DialogType.normal,
-                title: 'Change Location',
-                subText: 'Select the country/province'
-              }}
-              modalProps={{
-                isBlocking: true,
-                styles: { main: { maxWidth: 450 } },
-              }}
-            >
-              <ComboBox
-                label="Country"
-                placeholder="Select country"
-                autoComplete="on"
-                value={this.state.chosenLocation.country}
-                selectedKey={this.state.chosenLocation.countryCode}
-                options={
-                  this.state.allLocations.Values().map(loc => {
-                    return {
-                      key: loc.countryCode,
-                      text: loc.country,
-                    } as IComboBoxOption;
-                  })
-                }
-                onChange = {
-                  (event, option:IComboBoxOption, idx, value) => {
-                    this.setState({chosenLocation:{
-                      province:"",
-                      country: option.text,
-                      countryCode: option.key as string,
-                    }});
-                  }
-                }
+              onLocationChange={this._onLocationChange}
+              allLocationsKey={this.CACHE_DATA_KEY}
+              defaultValue= {this.state.location}
               />
-
-              <ComboBox
-                label="Province"
-                hidden={this.state.allLocations.Item(this.state.chosenLocation.countryCode).provinces.length < 1}
-                placeholder="Select Province"
-                autoComplete="on"
-                value={this.state.chosenLocation.province}
-                selectedKey={this.state.chosenLocation.province}
-                options={
-                  this.state.allLocations.Item(this.state.chosenLocation.countryCode).provinces.map(province => {
-                    return {
-                      key: province,
-                      text: province,
-                    } as IComboBoxOption;
-                  })
-                }
-                onChange = {
-                  (event, option:IComboBoxOption, idx, value) => {
-                    this.setState({chosenLocation:{
-                      ...this.state.chosenLocation,
-                      province: option.text
-                    }});
-                  }
-                }
-              />
-
-            <DialogFooter>
-              <PrimaryButton onClick={this._onLocationChange} text="Save" />
-            </DialogFooter>
-            </Dialog>
           )}
 
         </div>
@@ -240,7 +223,6 @@ export default class Covid19Tracker extends React.Component<ICovid19TrackerProps
     const {location} = this.state;
 
     const STATS_API_URL:string = "https://coronavirus-tracker-api.herokuapp.com/all";
-    
 
     // Fetch the stats from the API and save in session for 60 mins
     let data:any = await this._storage.session.getOrPut(this.CACHE_DATA_KEY, () => {
@@ -251,7 +233,7 @@ export default class Covid19Tracker extends React.Component<ICovid19TrackerProps
     this.setState({
       latest: {
         ...data.latest,
-        lastUpdated: new Date(data.confirmed.last_updated)
+        lastUpdated: this._getLastUpdated(data.confirmed.locations[0].history),
       },
       locationStats: this._getLocationStats(data, location),
       showChangeDialog: false,
@@ -269,6 +251,7 @@ export default class Covid19Tracker extends React.Component<ICovid19TrackerProps
       if(element.country_code == location.countryCode && element.province == location.province)
       {
         stats.confirmed = element.latest;
+        stats.prevConfirmed = this._getPreviousCount(element.history);
         break;
       }
     }
@@ -279,6 +262,7 @@ export default class Covid19Tracker extends React.Component<ICovid19TrackerProps
       if(element.country_code == location.countryCode && element.province == location.province)
       {
         stats.deaths = element.latest;
+        stats.prevDeaths = this._getPreviousCount(element.history);
         break;
       }
     }
@@ -289,48 +273,46 @@ export default class Covid19Tracker extends React.Component<ICovid19TrackerProps
       if(element.country_code == location.countryCode && element.province == location.province)
       {
         stats.recovered = element.latest;
+        stats.prevRecovered = this._getPreviousCount(element.history);
         break;
       }
     }
     return stats;
   }
 
-  private _showChangeDialog = () => {
+  private _getPreviousCount = (history:any):number => {
+    let count:number;
+    let today:string;
+    let previous:string;
+    let interval:number = 0;
 
-    let locations = new KeyedCollection<ILocation>();
-    const locData:any = this._storage.session.get(this.CACHE_DATA_KEY);
-    
-    locData.confirmed.locations.map((d,i) => {
-      // Adding locations
-      if(!locations.ContainsKey(d.country_code))
-      {
-        locations.Add(d.country_code,{
-          country:d.country,
-          countryCode:d.country_code,
-          provinces:[]
-        });
-      }
-
-      // Check for provinces
-      if(
-        d.province && d.province.length > 0 &&
-        locations.Item(d.country_code).provinces.indexOf(d.province) == -1
-        )
-      {
-        locations.Item(d.country_code).provinces.push(d.province);
-      }
-    });
-
-    this.setState({
-      allLocations: locations,
-      showChangeDialog: true,
-    });
+    const options = {year: '2-digit', month: 'numeric', day: 'numeric' };
+    do {
+      today = dateAdd(new Date(),"day",interval).toLocaleDateString("en-US", options);
+      // Get previous days count
+      previous = dateAdd(new Date(),"day",interval-1).toLocaleDateString("en-US", options);
+      count = history[previous];
+      interval--;
+    } while(history[today] == undefined);
+    return count;
   }
 
-  private _onLocationChange = () => {
-    this._storage.local.put(this.CACHE_LOC_KEY, this.state.chosenLocation);
+  private _getLastUpdated = (history:any):string => {
+    let lastUpdate:string;
+    let interval:number = 0;
+
+    const options = {year: '2-digit', month: 'numeric', day: 'numeric' };
+    do {
+      lastUpdate = dateAdd(new Date(),"day",interval).toLocaleDateString("en-US", options);
+      interval--;
+    } while(history[lastUpdate] == undefined);
+    return lastUpdate;
+  }
+
+  private _onLocationChange = (newLocation:IStatsLocation) => {
+    this._storage.local.put(this.CACHE_LOC_KEY, newLocation);
     this.setState({
-      location:this.state.chosenLocation,
+      location:newLocation,
       showChangeDialog:false,
     },() => {this._getStats();});
   }

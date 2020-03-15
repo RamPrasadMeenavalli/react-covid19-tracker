@@ -3,52 +3,50 @@
 .covid19Tracker {
   .container {
 
+    .sectionTitle{
+      @include ms-fontSize-l;
+      color:$ms-color-black;
+    }
+
     .statContainer{
       @include ms-Grid-row;
+      background-color: "[theme: themeLighterAlt, default: #fecacd]";
+      margin-bottom:20px;
       .statBox{
         @include ms-Grid-col;
         @include ms-sm12;
-        background-color: "[theme: themeDark, default: #770208]";
+        
         .wrapper{
           padding:15px;
-          color: $ms-color-white;
+          color: $ms-color-black;
         }
       }
 
       .statBoxSecondary{
         @include ms-Grid-col;
         @include ms-sm6;
-        background-color: "[theme: themeLighterAlt, default: #fecacd]";
-        border-right: 1px dashed gray;
-        .wrapper{
-          margin:15px;
-          color: $ms-color-black;
-        }
-        .label{
-          @include ms-fontSize-xs;
-          
-        }
-        .count{
-          @include ms-fontSize-xl;
-        }
       }
 
       .statBoxSecondaryFull{
         @include ms-Grid-col;
         @include ms-sm12;
-        background-color: "[theme: themeLighterAlt, default: #fecacd]";
+      }
+
+      .wrapper{
+        color: $ms-color-black;
+        padding: 15px;
+        border: 1px solid gray;
+        margin-top: 8px;
+        margin-bottom: 8px;
+        border-radius: 5px;
+      }
+      .label{
+        @include ms-fontSize-xs;
+        white-space: nowrap;
         
-        .wrapper{
-          padding:15px;
-          color: $ms-color-black;
-        }
-        .label{
-          @include ms-fontSize-xs;
-          
-        }
-        .count{
-          @include ms-fontSize-xl;
-        }
+      }
+      .count{
+        @include ms-fontSize-l;
       }
 
       .label{
@@ -56,7 +54,33 @@
         
       }
       .count{
-        @include ms-fontSize-xxl;
+        @include ms-fontSize-xl;
+
+        .change{
+          display:inline-block;
+          padding-left: 5px;
+
+          @include ms-fontSize-s;
+          .red{
+            color:$ms-color-red;
+          }
+          .green{
+            color:$ms-color-green;
+          }
+          .neutral{
+            color:gray;
+          }
+          .up{
+            &::before{
+              content: "⮝";
+            }
+          }
+          .down{
+            &::before{
+              content:"⮟"
+            }
+          }
+        }
       }
     }
 
@@ -66,9 +90,6 @@
       font-style: italic;
       font-weight: bold;
       text-align: right;
-    }
-    .editButton{
-      top:-5px;
     }
   }
 }

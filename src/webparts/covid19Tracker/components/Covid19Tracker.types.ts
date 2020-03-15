@@ -19,15 +19,20 @@ export interface ICovid19TrackerState{
   locationStats:IStatsInfo;
 
   showChangeDialog:boolean;
-  allLocations?:KeyedCollection<ILocation>;
-  chosenLocation?:IStatsLocation;
+
 }
 
 export interface IStatsInfo{
   confirmed: number;
+  prevConfirmed?: number;
+
   deaths: number;
+  prevDeaths?: number;
+
   recovered: number;
-  lastUpdated?: Date;
+  prevRecovered?: number;
+
+  lastUpdated?: string;
 }
 
 export interface IStatsLocation{
