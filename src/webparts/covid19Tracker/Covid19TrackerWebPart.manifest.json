@@ -20,7 +20,7 @@
     "group": { "default": "Other" },
     "title": { "default": "COVID-19 Tracker" },
     "description": { "default": "COVID-19 Tracker description" },
-    "officeFabricIconFontName": "Page",
+    "officeFabricIconFontName": "Trackers",
     "properties": {
       "title": "COVID-19 Tracker",
       "showConfirmed": true,
