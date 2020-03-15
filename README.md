@@ -1,4 +1,4 @@
-# react-covid-19-tracker
+# react-covid19-tracker
 [![Tweet](https://img.shields.io/twitter/url?url=https://github.com/RamPrasadMeenavalli/react-covid19-tracker)](https://twitter.com/intent/tweet?text=SPFx%20COVID-19%20tracker%20webpart&url=https://github.com/RamPrasadMeenavalli/react-covid19-tracker) 
 [![Github all releases](https://img.shields.io/github/downloads/RamPrasadMeenavalli/react-covid19-tracker/total.svg)](https://github.com/RamPrasadMeenavalli/react-covid19-tracker/releases/)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/RamPrasadMeenavalli/react-covid19-tracker)
@@ -7,7 +7,7 @@ This webpart shows the number of COVID-19 cases recorded from different countrie
 
 Refer the [blog](https://blog.meenavalli.in/post/spfx-covid-19-tracker-webpart) for more details
 ##  
-![covid-19-tracker](/assets/screen-one.gif) 
+![covid19-tracker](/assets/screen-one.gif) 
 
 ## Data Respository
 This webpart used the data repository of the 2019 Novel Coronavirus Visual Dashboard operated by the Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE).
