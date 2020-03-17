@@ -22,10 +22,7 @@
     "description": { "default": "COVID-19 Tracker description" },
     "officeFabricIconFontName": "Trackers",
     "properties": {
-      "title": "COVID-19 Tracker",
-      "showConfirmed": true,
-      "showDeaths": true,
-      "showRecovered": true
+      "title": "COVID-19 Tracker"
     }
   }]
 }

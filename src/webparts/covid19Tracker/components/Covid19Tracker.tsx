@@ -4,22 +4,18 @@ import { ICovid19TrackerProps, ICovid19TrackerState, IStatsLocation, IStatsInfo,
 import { WebPartTitle } from "@pnp/spfx-controls-react/lib/WebPartTitle";
 import { IReadonlyTheme } from "@microsoft/sp-component-base";
 import { PnPClientStorage, dateAdd } from '@pnp/common';
-import { KeyedCollection } from './KeyedCollection';
+import { KeyedCollection } from '../Utilities/KeyedCollection';
 import { IconButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { ComboBox, IComboBoxOption, SelectableOptionMenuItemType, css } from 'office-ui-fabric-react/lib/index';
+import { ComboBox, IComboBoxOption, SelectableOptionMenuItemType, css, Text, ITheme } from 'office-ui-fabric-react/lib/index';
 import ChangeLocationDialog from './ChangeLocationDialog/ChangeLocationDialog';
+import { Utilities } from '../Utilities/Utilities';
 
 export default class Covid19Tracker extends React.Component<ICovid19TrackerProps, ICovid19TrackerState> {
 
   private readonly CACHE_LOC_KEY = "SPFX-COVID19-LOC-KEY";
   private readonly CACHE_DATA_KEY:string = "SPFX-COVID19-TRACKER";
-  private readonly DEFAULT_LOCATION = {
-    country:"India",
-    countryCode:"IN",
-  };
-
   private _storage:PnPClientStorage;
 
   constructor(props:ICovid19TrackerProps){
@@ -30,7 +26,7 @@ export default class Covid19Tracker extends React.Component<ICovid19TrackerProps
     // If not found set to default value
     let selectedLoc:IStatsLocation = this._storage.local.get(this.CACHE_LOC_KEY);
     if(!selectedLoc){
-      selectedLoc = this.DEFAULT_LOCATION;
+      selectedLoc = this.props.defaultLocation;
     }
     
     // Initialize state
@@ -40,12 +36,14 @@ export default class Covid19Tracker extends React.Component<ICovid19TrackerProps
         confirmed: 0,
         deaths: 0,
         recovered: 0,
+        active: 0,
       },
       location: selectedLoc,
       locationStats:{
         confirmed: 0,
         deaths: 0,
         recovered: 0,
+        active: 0,
       }
     };
   }
@@ -53,7 +51,7 @@ export default class Covid19Tracker extends React.Component<ICovid19TrackerProps
   public render(): React.ReactElement<ICovid19TrackerProps> {
     const {latest, locationStats} = this.state;
     const { semanticColors }: IReadonlyTheme = this.props.themeVariant;
-    const secondaryRowCssClass = this.props.showDeaths && this.props.showRecovered ? styles.statBoxSecondary : styles.statBoxSecondaryFull;
+
     return (
       <div className={ styles.covid19Tracker }
         style={{ backgroundColor: semanticColors.bodyBackground }}
@@ -68,33 +66,40 @@ export default class Covid19Tracker extends React.Component<ICovid19TrackerProps
         <div className={ styles.container }>
 
           {/* Show totals */}
-          <div className= { styles.statContainer }>
-            {this.props.showConfirmed && (
-              <div className = {styles.statBox}>
-                <div className = {styles.wrapper}>
-                <div className = {styles.label}>
-                  Total Confirmed
-                </div>
-                <div className={styles.count}>
-                  {latest.confirmed.toLocaleString()}
-                </div>
-                </div>
-              </div>              
-            )}
-            {this.props.showRecovered && (
-              <div className = {secondaryRowCssClass}>
-                <div className = {styles.wrapper}>
-                <div className = {styles.label}>
-                  Total Recovered
-                </div>
-                <div className={styles.count}>
-                  {latest.recovered.toLocaleString()}
-                </div>
-                </div>
-              </div>              
-            )}
-            {this.props.showDeaths && (
-              <div className = {secondaryRowCssClass}>
+            <div className={ styles.primaryLabel }>
+              Total Confirmed
+            </div>
+
+            <div className={ styles.primaryCount }>
+              { latest.confirmed.toLocaleString() }
+            </div>
+
+            <div className = {styles.statRow}>
+              <div className = {styles.wrapper}>
+              <div className = {styles.label}>
+                Total Active
+              </div>
+              <div className={styles.count}>
+                {latest.active.toLocaleString()}
+              </div>
+              </div>
+            </div>              
+
+          
+            <div className = {styles.statRow}>
+              <div className = {styles.wrapper}>
+              <div className = {styles.label}>
+                Total Recovered
+              </div>
+              <div className={styles.count}>
+                {latest.recovered.toLocaleString()}
+              </div>
+              </div>
+            </div>              
+          
+
+          
+              <div className = {styles.statRow}>
                 <div className = {styles.wrapper}>
                 <div className = {styles.label}>
                   Total Deaths
@@ -104,8 +109,8 @@ export default class Covid19Tracker extends React.Component<ICovid19TrackerProps
                 </div>
                 </div>
               </div>              
-            )}  
-          </div>
+          
+          <div className={styles.divider}>&nbsp;</div>
 
           {/* Show the statistics for the selected location */}
           <div className={styles.sectionTitle}>
@@ -117,85 +122,102 @@ export default class Covid19Tracker extends React.Component<ICovid19TrackerProps
                 <Icon iconName="Edit"></Icon>
               </IconButton>
           </div>
-          <div className= { styles.statContainer }>
 
-            {this.props.showConfirmed && (
-              <div className = {styles.statBox}>
-                <div className = {styles.wrapper}>
-                <div className = {styles.label}>
-                  Confirmed
-                </div>
-                <div className={styles.count}>
-                  {locationStats.confirmed.toLocaleString()}
-
-                  <div className={styles.change}>
-                    {locationStats.confirmed > locationStats.prevConfirmed ? 
-                      // Negative case
-                      <div className={css(styles.red, styles.up)}>{locationStats.confirmed - locationStats.prevConfirmed}</div> : 
-                      locationStats.confirmed < locationStats.prevConfirmed ? 
-                      // Positive case
-                      <div className={css(styles.green, styles.down)}>{locationStats.prevConfirmed - locationStats.confirmed}</div> : 
-                      // Neutral case
-                      <div className={styles.neutral}>0</div>
-                    }
-                  </div>
-                </div>
-                </div>
-              </div>              
-            )}
-            {this.props.showRecovered && (
-              <div className = {secondaryRowCssClass}>
-                <div className = {styles.wrapper}>
-                <div className = {styles.label}>
-                  Recovered
-                </div>
-                <div className={styles.count}>
-                  {locationStats.recovered.toLocaleString()}
-                  <div className={styles.change}>
-                    {locationStats.recovered > locationStats.prevRecovered ? 
-                      // Positive case
-                      <div className={css(styles.green, styles.up)}>{locationStats.recovered - locationStats.prevRecovered}</div> : 
-                      locationStats.recovered < locationStats.prevRecovered ? 
-                      // Negative case
-                      <div className={css(styles.red, styles.down)}>{locationStats.prevRecovered - locationStats.recovered}</div> : 
-                      // Neutral case
-                      <div className={styles.neutral}>0</div>
-                    }
-                  </div>                  
-                </div>
-                </div>
-              </div>              
-            )}
-            {this.props.showDeaths && (
-              <div className = {secondaryRowCssClass}>
-                <div className = {styles.wrapper}>
-                <div className = {styles.label}>
-                  Deaths
-                </div>
-                <div className={styles.count}>
-                  {locationStats.deaths.toLocaleString()}
-                  <div className={styles.change}>
-                    {locationStats.deaths > locationStats.prevDeaths ? 
-                      // Negative case
-                      <div className={css(styles.red, styles.up)}>{locationStats.deaths - locationStats.prevDeaths}</div> : 
-                      locationStats.deaths < locationStats.prevDeaths ? 
-                      // Positive case
-                      <div className={css(styles.green, styles.down)}>{locationStats.prevDeaths - locationStats.deaths}</div> : 
-                      // Neutral case
-                      <div className={styles.neutral}>0</div>
-                    }
-                  </div>
-                </div>
-                </div>
-              </div>              
-            )}  
+          <div className={ styles.primaryLabel }>
+            Confirmed
           </div>
 
+          <div className={ styles.primaryCount }>
+            {locationStats.confirmed.toLocaleString()}
+            <div className={styles.change}>
+              {locationStats.confirmed > locationStats.prevConfirmed ? 
+                // Negative case
+                <div className={css(styles.red, styles.up)}>{locationStats.confirmed - locationStats.prevConfirmed}</div> : 
+                locationStats.confirmed < locationStats.prevConfirmed ? 
+                // Positive case
+                <div className={css(styles.green, styles.down)}>{locationStats.prevConfirmed - locationStats.confirmed}</div> : 
+                // Neutral case
+                <div className={styles.neutral}>0</div>
+              }
+            </div>
+            </div>
+
+          <div className = {styles.statRow}>
+            <div className = {styles.wrapper}>
+            <div className = {styles.label}>
+              Active
+            </div>
+            <div className={styles.count}>
+              {locationStats.active.toLocaleString()}
+              <div className={styles.change}>
+                {locationStats.active > locationStats.prevActive ? 
+                  // Negative case
+                  <div className={css(styles.red, styles.up)}>{locationStats.active - locationStats.prevActive}</div> : 
+                  locationStats.active < locationStats.prevActive ? 
+                  // Positive case
+                  <div className={css(styles.green, styles.down)}>{locationStats.prevActive - locationStats.active}</div> : 
+                  // Neutral case
+                  <div className={styles.neutral}>0</div>
+                }
+              </div>                  
+            </div>
+            </div>
+          </div>              
+
+            <div className = {styles.statRow}>
+              <div className = {styles.wrapper}>
+              <div className = {styles.label}>
+                Recovered
+              </div>
+              <div className={styles.count}>
+                {locationStats.recovered.toLocaleString()}
+                <div className={styles.change}>
+                  {locationStats.recovered > locationStats.prevRecovered ? 
+                    // Positive case
+                    <div className={css(styles.green, styles.up)}>{locationStats.recovered - locationStats.prevRecovered}</div> : 
+                    locationStats.recovered < locationStats.prevRecovered ? 
+                    // Negative case
+                    <div className={css(styles.red, styles.down)}>{locationStats.prevRecovered - locationStats.recovered}</div> : 
+                    // Neutral case
+                    <div className={styles.neutral}>0</div>
+                  }
+                </div>                  
+              </div>
+              </div>
+            </div>              
+            <div className = {styles.statRow}>
+              <div className = {styles.wrapper}>
+              <div className = {styles.label}>
+                Deaths
+              </div>
+              <div className={styles.count}>
+                {locationStats.deaths.toLocaleString()}
+                <div className={styles.change}>
+                  {locationStats.deaths > locationStats.prevDeaths ? 
+                    // Negative case
+                    <div className={css(styles.red, styles.up)}>{locationStats.deaths - locationStats.prevDeaths}</div> : 
+                    locationStats.deaths < locationStats.prevDeaths ? 
+                    // Positive case
+                    <div className={css(styles.green, styles.down)}>{locationStats.prevDeaths - locationStats.deaths}</div> : 
+                    // Neutral case
+                    <div className={styles.neutral}>0</div>
+                  }
+                </div>
+              </div>
+              </div>
+            </div>              
+
+        <div className={styles.footNote}>
+          <div className={styles.dataSource}>
+            <a href="https://blog.meenavalli.in/post/spfx-covid-19-tracker-webpart#dataSource" target="_blank">Data source</a>
+          </div>
           {latest.lastUpdated && (
             <div className={styles.date}>
             as on {latest.lastUpdated}
             </div>            
           )}
+        </div>
+          
           
 
           {/* Modal to personalize the selected location */}
@@ -205,7 +227,7 @@ export default class Covid19Tracker extends React.Component<ICovid19TrackerProps
               isOpen={this.state.showChangeDialog}
               onDismiss={()=>{this.setState({showChangeDialog:false});}}
               onLocationChange={this._onLocationChange}
-              allLocationsKey={this.CACHE_DATA_KEY}
+              allLocations={Utilities.getAllLocations(this.props.apiData)}
               defaultValue= {this.state.location}
               />
           )}
@@ -221,18 +243,12 @@ export default class Covid19Tracker extends React.Component<ICovid19TrackerProps
 
   private _getStats = async () => {
     const {location} = this.state;
-
-    const STATS_API_URL:string = "https://coronavirus-tracker-api.herokuapp.com/all";
-
-    // Fetch the stats from the API and save in session for 60 mins
-    let data:any = await this._storage.session.getOrPut(this.CACHE_DATA_KEY, () => {
-      return fetch(STATS_API_URL)
-      .then(response => response.text()).then(d => JSON.parse(d));
-    }, dateAdd(new Date(), "minute", 60));
+    const data = this.props.apiData;
 
     this.setState({
       latest: {
         ...data.latest,
+        active: data.latest.confirmed - (data.latest.recovered + data.latest.deaths),
         lastUpdated: this._getLastUpdated(data.confirmed.locations[0].history),
       },
       locationStats: this._getLocationStats(data, location),
@@ -277,6 +293,9 @@ export default class Covid19Tracker extends React.Component<ICovid19TrackerProps
         break;
       }
     }
+
+    stats.active = stats.confirmed - (stats.recovered + stats.deaths);
+    stats.prevActive = stats.prevConfirmed - (stats.prevRecovered + stats.prevDeaths);
     return stats;
   }
 

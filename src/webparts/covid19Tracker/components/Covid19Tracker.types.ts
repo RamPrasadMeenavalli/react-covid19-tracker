@@ -1,6 +1,6 @@
 import { IReadonlyTheme } from "@microsoft/sp-component-base";
 import { DisplayMode } from "@microsoft/sp-core-library";
-import { KeyedCollection } from "./KeyedCollection";
+import { KeyedCollection } from "../Utilities/KeyedCollection";
 
 export interface ICovid19TrackerProps {
   title: string;
@@ -8,18 +8,20 @@ export interface ICovid19TrackerProps {
   themeVariant: IReadonlyTheme;
   displayMode: DisplayMode;
 
-  showConfirmed: boolean;
-  showDeaths: boolean;
-  showRecovered: boolean;
+  apiData: any;
+  defaultLocation:IStatsLocation;
 }
 
 export interface ICovid19TrackerState{
+  // selected location
   location:IStatsLocation;
+  // latest global stats
   latest: IStatsInfo;
+  // stats for the selected location
   locationStats:IStatsInfo;
 
+  // to show/hide the change location dialog
   showChangeDialog:boolean;
-
 }
 
 export interface IStatsInfo{
@@ -31,6 +33,9 @@ export interface IStatsInfo{
 
   recovered: number;
   prevRecovered?: number;
+
+  active: number;
+  prevActive?: number;
 
   lastUpdated?: string;
 }

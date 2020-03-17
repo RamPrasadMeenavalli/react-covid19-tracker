@@ -1,8 +1,8 @@
-import { KeyedCollection } from "../KeyedCollection";
+import { KeyedCollection } from "../../Utilities/KeyedCollection";
 import { ILocation, IStatsLocation } from '../Covid19Tracker.types';
 
 export interface IChangeLocationDialogProps{
-    allLocationsKey: string;
+    allLocations?:KeyedCollection<ILocation>;
     defaultValue?: IStatsLocation;
     isOpen:boolean;
 
@@ -11,6 +11,5 @@ export interface IChangeLocationDialogProps{
 }
 
 export interface IChangeLocationDialogState{
-    allLocations?:KeyedCollection<ILocation>;
     chosenLocation?:IStatsLocation;
 }

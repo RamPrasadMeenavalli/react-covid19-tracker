@@ -32,10 +32,8 @@ The data is collected from WHO, Health Departments and other Government function
  
 Property |Type|Default| Comments
 --------------------|----|--------|----------
-Show Confirmed | Boolean | True| Shows/hides the count of confirmed cases
-Show Recovered| Boolean | True| Shows/hides the count of recovered cases
-Show Deaths | Boolean | True | Shows/hides the count of deaths
-
+Default Country | Dropdown |  | The default country to be shown
+Default Province | Dropdown |   | The default province to be shown
 ## Solution
 This Web Part uses PnPjs library, Office-UI-Fabric-react components and [coronavirus-tracker-api](https://github.com/ExpDev07/coronavirus-tracker-api) which is a wrapper on top of [Johns Hopkins CSSE data respository](https://github.com/CSSEGISandData/COVID-19)
 
@@ -48,6 +46,7 @@ react-covid-19-tracker|[Ram](https://twitter.com/ram_meenavalli) [![Twitter](htt
 Version|Date|Comments
 -------|----|--------
 1.0.0.0|March 15, 2020|Initial release
+1.0.0.1|March 17, 2020|Added property to select default Country/Province. Changed the display format for the stats.
 
 ## Disclaimer
 **THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.**

@@ -1,18 +1,12 @@
 import * as React from 'react';
 import { IChangeLocationDialogProps, IChangeLocationDialogState } from './ChangeLocationDialog.types';
 import { Dialog, DialogType, ComboBox, IComboBoxOption, DialogFooter, PrimaryButton } from 'office-ui-fabric-react';
-import { KeyedCollection } from '../KeyedCollection';
-import { ILocation } from '../Covid19Tracker.types';
-import { PnPClientStorage, dateAdd } from '@pnp/common';
 
 export default class ChangeLocationDialog extends React.Component<IChangeLocationDialogProps, IChangeLocationDialogState> {
-    private _storage:PnPClientStorage;
     constructor(props:IChangeLocationDialogProps){
         super(props);
-        this._storage = new PnPClientStorage();
         this.state={
             chosenLocation: this.props.defaultValue,
-            allLocations: this._getAllLocations(),
         };
     }
 
@@ -39,7 +33,9 @@ export default class ChangeLocationDialog extends React.Component<IChangeLocatio
                 value={this.state.chosenLocation.country}
                 selectedKey={this.state.chosenLocation.countryCode}
                 options={
-                  this.state.allLocations.Values().map(loc => {
+                  this.props.allLocations.Values()
+                  .sort((a,b)=> {return a.country>b.country?1:a.country<b.country?-1:0;})
+                  .map(loc => {
                     return {
                       key: loc.countryCode,
                       text: loc.country,
@@ -49,7 +45,8 @@ export default class ChangeLocationDialog extends React.Component<IChangeLocatio
                 onChange = {
                   (event, option:IComboBoxOption, idx, value) => {
                     this.setState({chosenLocation:{
-                      province:"",
+                      province:this.props.allLocations.Item(option.key as string).provinces.length > 0 ?
+                      this.props.allLocations.Item(option.key as string).provinces[0] : "",
                       country: option.text,
                       countryCode: option.key as string,
                     }});
@@ -59,13 +56,14 @@ export default class ChangeLocationDialog extends React.Component<IChangeLocatio
 
               <ComboBox
                 label="Province"
-                hidden={this.state.allLocations.Item(this.state.chosenLocation.countryCode).provinces.length < 1}
+                hidden={this.props.allLocations.Item(this.state.chosenLocation.countryCode).provinces.length < 1}
                 placeholder="Select Province"
                 autoComplete="on"
                 value={this.state.chosenLocation.province}
                 selectedKey={this.state.chosenLocation.province}
                 options={
-                  this.state.allLocations.Item(this.state.chosenLocation.countryCode).provinces.map(province => {
+                  this.props.allLocations.Item(this.state.chosenLocation.countryCode)
+                  .provinces.sort().map(province => {
                     return {
                       key: province,
                       text: province,
@@ -88,33 +86,5 @@ export default class ChangeLocationDialog extends React.Component<IChangeLocatio
             </Dialog>
             </>
         );
-    }
-
-    private _getAllLocations = ():KeyedCollection<ILocation> => {
-        let locations = new KeyedCollection<ILocation>();
-        const locData:any = this._storage.session.get(this.props.allLocationsKey);
-        
-        locData.confirmed.locations.map((d,i) => {
-          // Adding locations
-          if(!locations.ContainsKey(d.country_code))
-          {
-            locations.Add(d.country_code,{
-              country:d.country,
-              countryCode:d.country_code,
-              provinces:[]
-            });
-          }
-    
-          // Check for provinces
-          if(
-            d.province && d.province.length > 0 &&
-            locations.Item(d.country_code).provinces.indexOf(d.province) == -1
-            && d.latest > 0
-            )
-          {
-            locations.Item(d.country_code).provinces.push(d.province);
-          }
-        });
-        return locations;
     }
 }

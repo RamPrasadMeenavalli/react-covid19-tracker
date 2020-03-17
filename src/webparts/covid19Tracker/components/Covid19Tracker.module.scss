@@ -2,94 +2,117 @@
 
 .covid19Tracker {
   .container {
+    background-color: $ms-color-white;
 
     .sectionTitle{
-      @include ms-fontSize-l;
+      @include ms-fontSize-xl;
       color:$ms-color-black;
+      margin: 1rem 0;
     }
 
-    .statContainer{
-      @include ms-Grid-row;
-      background-color: "[theme: themeLighterAlt, default: #fecacd]";
-      margin-bottom:20px;
-      .statBox{
-        @include ms-Grid-col;
-        @include ms-sm12;
-        
-        .wrapper{
-          padding:15px;
-          color: $ms-color-black;
-        }
-      }
-
-      .statBoxSecondary{
-        @include ms-Grid-col;
-        @include ms-sm6;
-      }
-
-      .statBoxSecondaryFull{
-        @include ms-Grid-col;
-        @include ms-sm12;
-      }
-
-      .wrapper{
-        color: $ms-color-black;
-        padding: 15px;
-        border: 1px solid gray;
-        margin-top: 8px;
-        margin-bottom: 8px;
-        border-radius: 5px;
-      }
-      .label{
-        @include ms-fontSize-xs;
-        white-space: nowrap;
-        
-      }
-      .count{
-        @include ms-fontSize-l;
-      }
-
-      .label{
-        @include ms-fontSize-s;
-        
-      }
-      .count{
-        @include ms-fontSize-xl;
-
-        .change{
-          display:inline-block;
-          padding-left: 5px;
-
-          @include ms-fontSize-s;
-          .red{
-            color:$ms-color-red;
-          }
-          .green{
-            color:$ms-color-green;
-          }
-          .neutral{
-            color:gray;
-          }
-          .up{
-            &::before{
-              content: "⮝";
-            }
-          }
-          .down{
-            &::before{
-              content:"⮟"
-            }
-          }
-        }
-      }
+    .divider{
+      border-bottom: 1px dashed gray;
     }
 
-    .date{
-      @include ms-fontSize-xs;
+    .primaryLabel{
+      @include ms-fontSize-l;
       color: gray;
-      font-style: italic;
-      font-weight: bold;
-      text-align: right;
     }
+    .primaryCount{
+      @include ms-fontSize-xxl;
+      color: "[theme: themePrimary, default: #fecacd]";
+      font-weight: 500;
+      margin-bottom: 1rem;
+      .change{
+        display:inline-block;
+        padding-left: 5px;
+
+        @include ms-fontSize-s;
+        .red{
+          color:$ms-color-red;
+        }
+        .green{
+          color:$ms-color-green;
+        }
+        .neutral{
+          color:gray;
+        }
+        .up{
+          &::before{
+            content: "⮝";
+          }
+        }
+        .down{
+          &::before{
+            content:"⮟"
+          }
+        }
+      }
+    }
+
+    .statRow{
+      @include ms-Grid-row;
+      margin-bottom:0.5rem;
+      .wrapper{
+        .label{
+          @include ms-fontSize-m;
+          @include ms-Grid-col;
+          @include ms-sm6;
+  
+          color: gray;
+        }
+        .count{
+          @include ms-fontSize-m;
+          @include ms-Grid-col;
+          @include ms-sm6;
+
+          color: $ms-color-black;
+          .change{
+            display:inline-block;
+            padding-left: 5px;
+
+            @include ms-fontSize-s;
+            .red{
+              color:$ms-color-red;
+            }
+            .green{
+              color:$ms-color-green;
+            }
+            .neutral{
+              color:gray;
+            }
+            .up{
+              &::before{
+                content: "⮝";
+              }
+            }
+            .down{
+              &::before{
+                content:"⮟"
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .footNote{
+      .dataSource{
+        @include ms-fontSize-mi;
+        float:left;
+        width:50%;
+        color: gray;
+      }
+      .date{
+        @include ms-fontSize-xs;
+        float: right;
+        width:50%;
+        color: gray;
+        font-style: italic;
+        font-weight: bold;
+        text-align: right;
+      }
+    }
+    
   }
 }
