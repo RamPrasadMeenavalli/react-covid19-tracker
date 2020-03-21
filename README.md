@@ -48,6 +48,9 @@ Version|Date|Comments
 1.0.0.0|March 15, 2020|Initial release
 1.0.0.1|March 17, 2020|Added property to select default Country/Province. Changed the display format for the stats.
 
+## Want to Contribute? 
+If you would like to contribute by adding new features or fixing existing/reported issues, please checkout the [issues](https://github.com/RamPrasadMeenavalli/react-covid19-tracker/issues). Leave a comment on the issue which you would like to work on. Once the issue is assigned to you, you can start working on the task and submit a pull request. 
+
 ## Disclaimer
 **THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.**
 
