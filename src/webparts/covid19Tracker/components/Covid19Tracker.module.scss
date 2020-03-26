@@ -12,6 +12,15 @@
         text-align: center;
       }
     }
+
+    .footNote{
+      .dataSource{
+        @include ms-fontSize-mi;
+        float:left;
+        width:50%;
+        color: gray;
+      }
+    }
     
     :global{
       .ms-Dialog-button--close, .ms-ComboBox-CaretDown-button{

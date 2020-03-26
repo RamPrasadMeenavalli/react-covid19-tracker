@@ -86,6 +86,13 @@ export default class Covid19Tracker extends React.Component<ICovid19TrackerProps
             </Dialog>
 
     </div>
+      
+        <div className={styles.footNote}>
+          <div className={styles.dataSource}>
+            <a href="https://blog.meenavalli.in/post/spfx-covid-19-tracker-webpart#dataSource" target="_blank">Data source</a>
+          </div>
+        </div>
+          
       </div>
     </div>
   );
