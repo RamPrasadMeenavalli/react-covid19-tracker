@@ -1,6 +1,6 @@
 {
   "name": "react-covid-19-tracker",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": true,
   "main": "lib/index.js",
   "engines": {
@@ -23,7 +23,7 @@
     "@types/react": "16.8.8",
     "@types/react-dom": "16.8.3",
     "@types/webpack-env": "1.13.1",
-    "office-ui-fabric-react": "6.189.2",
+    "office-ui-fabric-react": "7.105.2",
     "react": "16.8.5",
     "react-dom": "16.8.5"
   },

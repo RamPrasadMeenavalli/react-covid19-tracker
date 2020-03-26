@@ -1,0 +1,108 @@
+@import "node_modules/office-ui-fabric-react/dist/sass/References.scss";
+
+.statsBox{
+    max-width: 250px;
+    margin: 0 auto;
+    background: lightgray;
+    padding: 1rem;
+
+    .title{
+        color: black;
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: .5rem;          
+
+        .editButton{
+            float: right;
+            background-color: #000;
+            color: #fff;
+            border-radius: 5px;
+            min-width: 10px;
+            &:hover{
+                background: #000 !important;
+                font-size: 18px;
+            }
+        }
+    }
+
+    .container{
+        background: #fff;
+        padding: 1rem;
+        border-radius: 5px;
+        font-weight: 500;
+        .primaryRow{
+            display:inline-block;
+            width: 100%;
+            .primaryCol{
+                float:left;
+                @include ms-sm12;
+
+                .label{
+                    font-size: 12px;
+                    color:#606060;
+                    text-transform: uppercase;
+                }
+                .count{
+                    font-size: 22px;
+                    color:#FF8000;
+                    font-weight: bold;
+                    margin-bottom: 3px;
+                }
+            }
+        }
+
+        .secondaryRow{
+            display:inline-block;
+            width: 100%;
+            .secondaryCol{
+                float:left;
+                @include ms-sm6;
+
+                .label{
+                    font-size: 12px;
+                    color:#606060;
+                }
+                .count{
+                    font-size: 12px;
+                    color:black;
+                }
+            }
+        }
+
+        .change{
+            display:inline-block;
+            padding-left: 5px;
+
+            @include ms-fontSize-xs;
+            .red{
+              color:$ms-color-red;
+            }
+            .green{
+              color:$ms-color-green;
+            }
+            .neutral{
+              color:gray;
+            }
+            .up{
+              &::before{
+                content: "⮝";
+                padding-right: 2px;
+              }
+            }
+            .down{
+              &::before{
+                content:"⮟";
+                padding-right: 2px;
+              }
+            }
+        }
+    }
+    
+    .updatedInfo{
+    font-size: 10px;
+    font-style: italic;
+    font-weight: bold;
+    text-align: right;
+    padding-top: 5px;
+    }
+}

@@ -9,9 +9,8 @@ Refer the [blog](https://blog.meenavalli.in/post/spfx-covid-19-tracker-webpart) 
 ##  
 ![covid19-tracker](/assets/screen-one.gif) 
 
-## Data Respository
-This webpart used the data repository of the 2019 Novel Coronavirus Visual Dashboard operated by the Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE).
-The data is collected from WHO, Health Departments and other Government functions of different countries. More details and usage guidelines can be found on this repository - [https://github.com/CSSEGISandData/COVID-19](https://github.com/CSSEGISandData/COVID-19)
+## Data Source
+This webpart uses the data from [Coronavirus Data API](https://thevirustracker.com/api)
 
 ## How to use
 - Download the latest app package file from the [Releases](https://github.com/RamPrasadMeenavalli/react-covid19-tracker/releases) section. 

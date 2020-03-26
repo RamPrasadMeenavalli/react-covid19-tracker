@@ -22,7 +22,8 @@
     "description": { "default": "COVID-19 Tracker description" },
     "officeFabricIconFontName": "Trackers",
     "properties": {
-      "title": "COVID-19 Tracker"
+      "title": "COVID-19 Tracker",
+      "defaultCountry" : "IN"
     }
   }]
 }

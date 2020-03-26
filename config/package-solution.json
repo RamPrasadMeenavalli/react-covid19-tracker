@@ -3,7 +3,7 @@
   "solution": {
     "name": "react-covid-19-tracker-client-side-solution",
     "id": "5993a67a-ef68-4503-94d1-ac44644f2d60",
-    "version": "1.0.0.1",
+    "version": "1.0.0.3",
     "includeClientSideAssets": true,
     "isDomainIsolated": false
   },
