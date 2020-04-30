@@ -7,8 +7,8 @@ export default class DataService{
     public static CACE_MAX_TTL = 315569520;
 
     // API ENDPOINT
-    public static API_GET_GLOBAL:string = "https://thevirustracker.com/free-api?global=stats";
-    public static API_GET_COUNTRY:string = "https://thevirustracker.com/free-api?countryTotal=";
+    public static API_GET_GLOBAL:string = "https://api.thevirustracker.com/free-api?global=stats";
+    public static API_GET_COUNTRY:string = "https://api.thevirustracker.com/free-api?countryTotal=";
 
     // CACHE KEYS
     public static CACHE_GLOBAL = "SPFX-COVID-TRACKER-GLOBAL-V2";
